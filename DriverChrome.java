@@ -4,6 +4,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.util.Map;
+
 public class DriverChrome
 {
         private WebDriver driver;
@@ -25,21 +27,47 @@ public class DriverChrome
             this.driver = driver;
         }
 
-        public String getCapital(String country)
+        public boolean check(Map<String, String> map)
         {
             WebElement element;
-            try
+            String text;
+            for (String key : map.keySet())
             {
-                element = driver.findElement(By.xpath("//td[strong[text()='" + country +
-                        "']]/following-sibling::td[@style='width: 132.667px;']"));
-            }
-            catch (NoSuchElementException e)
-            {
-                return "Error! No such country!";
+                if(key.equals("Country"))
+                {
+                    try
+                    {
+                        text = map.get(key);
+                        element = driver.findElement(By.xpath("//td/strong[text()='" + text + "']"));
+                    }
+                    catch (NoSuchElementException e)
+                    {
+                        return false;
+                    }
+                }
+                else if(key.equals("Capitals"))
+                {
+                    try
+                    {
+                        text = map.get(key);
+                        element = driver.findElement(By.xpath("//td[text()='"+
+                                text +"']/preceding-sibling::td[2]"));
+                    }
+                    catch (NoSuchElementException e)
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+
             }
 
-            return element.getText();
+            return true;
         }
+
 
         public void quit()
         {
