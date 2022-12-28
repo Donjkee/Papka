@@ -1,4 +1,5 @@
-import java.util.Scanner;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main
 {
@@ -6,17 +7,17 @@ public class Main
     {
         System.setProperty("webdriver.chrome.driver","C:\\tools\\chromedrivers\\chromedriver.exe");
         DriverChrome test = new DriverChrome("https://cosmocode.io/automation-practice-webtable/");
-        Scanner scanner = new Scanner(System.in);
+        Map<String, String> map = new HashMap<>();
+        map.put("Country", "Algeria");
+        map.put("Capitals", "Luanda");
 
-        String country = "";
-        System.out.println("Print 1 to stop");
-
-
-        for(; !country.equals("1");)
+        if(!test.check(map))
         {
-            System.out.print("Print country: ");
-            country = scanner.nextLine();
-            System.out.println("Capital is: " + test.getCapital(country));
+            System.out.println("Wrong table!");
+        }
+        else
+        {
+            System.out.println("Everything is good!");
         }
 
         test.quit();
