@@ -64,7 +64,6 @@ public class DriverChrome
                     }
                 }
                 scroll(scrollBar, scrollDown, scrollPerClick, scrollHeight);
-                System.out.println(i);
             }
             return 0;
         }
