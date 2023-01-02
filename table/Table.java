@@ -25,60 +25,6 @@ public class Table
         colCount = Integer.parseInt(table.getAttribute("aria-colcount"));
     }
 
-    public int getRowCount() {
-        return rowCount;
-    }
-
-    public void setRowCount(int rowCount) {
-        this.rowCount = rowCount;
-    }
-
-    public int getColCount() {
-        return colCount;
-    }
-
-    public void setColCount(int colCount) {
-        this.colCount = colCount;
-    }
-
-    public WebElement getTable()
-    {
-        return table;
-    }
-
-    public void setTable(WebElement table)
-    {
-        this.table = table;
-    }
-
-    public WebElement getScrollBar()
-    {
-        return scrollBar;
-    }
-
-    public void setScrollBar(WebElement scrollBar)
-    {
-        this.scrollBar = scrollBar;
-    }
-
-    public WebElement getScrollButton()
-    {
-        return scrollButton;
-    }
-
-    public void setScrollButton(WebElement scrollButton)
-    {
-        this.scrollButton = scrollButton;
-    }
-
-    public int getScrollHeight() {
-        return scrollHeight;
-    }
-
-    public void setScrollHeight(int scrollHeight) {
-        this.scrollHeight = scrollHeight;
-    }
-
     public WebElement[] getFirstRow()
     {
         WebElement[] elements = new WebElement[colCount];
@@ -169,5 +115,59 @@ public class Table
             scrollButton.click();
         }
         factHeight += px;
+    }
+    
+    public int getRowCount() {
+        return rowCount;
+    }
+
+    public void setRowCount(int rowCount) {
+        this.rowCount = rowCount;
+    }
+
+    public int getColCount() {
+        return colCount;
+    }
+
+    public void setColCount(int colCount) {
+        this.colCount = colCount;
+    }
+
+    public WebElement getTable()
+    {
+        return table;
+    }
+
+    public void setTable(WebElement table)
+    {
+        this.table = table;
+    }
+
+    public WebElement getScrollBar()
+    {
+        return scrollBar;
+    }
+
+    public void setScrollBar(WebElement scrollBar)
+    {
+        this.scrollBar = scrollBar;
+    }
+
+    public WebElement getScrollButton()
+    {
+        return scrollButton;
+    }
+
+    public void setScrollButton(WebElement scrollButton)
+    {
+        this.scrollButton = scrollButton;
+    }
+
+    public int getScrollHeight() {
+        return scrollHeight;
+    }
+
+    public void setScrollHeight(int scrollHeight) {
+        this.scrollHeight = scrollHeight;
     }
 }
