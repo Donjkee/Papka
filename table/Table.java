@@ -28,78 +28,6 @@ public class Table
         colCount = Integer.parseInt(table.getAttribute("aria-colcount"));
     }
 
-    public Actions getActions() {
-        return actions;
-    }
-
-    public void setActions(Actions actions) {
-        this.actions = actions;
-    }
-
-    public int getRowCount() {
-        return rowCount;
-    }
-
-    public void setRowCount(int rowCount) {
-        this.rowCount = rowCount;
-    }
-
-    public int getColCount() {
-        return colCount;
-    }
-
-    public void setColCount(int colCount) {
-        this.colCount = colCount;
-    }
-
-    public WebElement getTable()
-    {
-        return table;
-    }
-
-    public void setTable(WebElement table)
-    {
-        this.table = table;
-    }
-
-    public WebElement getScrollBar()
-    {
-        return scrollBar;
-    }
-
-    public void setScrollBar(WebElement scrollBar)
-    {
-        this.scrollBar = scrollBar;
-    }
-
-    public WebElement getScrollDownButton()
-    {
-        return scrollDownButton;
-    }
-
-    public void setScrollDownButton(WebElement scrollDownButton)
-    {
-        this.scrollDownButton = scrollDownButton;
-    }
-
-    public WebElement getScrollUpButton()
-    {
-        return scrollUpButton;
-    }
-
-    public void setScrollUpButton(WebElement scrollUpButton)
-    {
-        this.scrollUpButton = scrollUpButton;
-    }
-
-    public int getScrollHeight() {
-        return scrollHeight;
-    }
-
-    public void setScrollHeight(int scrollHeight) {
-        this.scrollHeight = scrollHeight;
-    }
-
     void scrollDown(int px)
     {
         int i = Integer.parseInt(scrollBar.getAttribute("aria-valuenow"));
@@ -200,5 +128,77 @@ public class Table
                 System.out.println("Cell at row: " + (Integer.parseInt(rowIndex) - 1));
             }
         }
+    }
+    
+    public Actions getActions() {
+        return actions;
+    }
+
+    public void setActions(Actions actions) {
+        this.actions = actions;
+    }
+
+    public int getRowCount() {
+        return rowCount;
+    }
+
+    public void setRowCount(int rowCount) {
+        this.rowCount = rowCount;
+    }
+
+    public int getColCount() {
+        return colCount;
+    }
+
+    public void setColCount(int colCount) {
+        this.colCount = colCount;
+    }
+
+    public WebElement getTable()
+    {
+        return table;
+    }
+
+    public void setTable(WebElement table)
+    {
+        this.table = table;
+    }
+
+    public WebElement getScrollBar()
+    {
+        return scrollBar;
+    }
+
+    public void setScrollBar(WebElement scrollBar)
+    {
+        this.scrollBar = scrollBar;
+    }
+
+    public WebElement getScrollDownButton()
+    {
+        return scrollDownButton;
+    }
+
+    public void setScrollDownButton(WebElement scrollDownButton)
+    {
+        this.scrollDownButton = scrollDownButton;
+    }
+
+    public WebElement getScrollUpButton()
+    {
+        return scrollUpButton;
+    }
+
+    public void setScrollUpButton(WebElement scrollUpButton)
+    {
+        this.scrollUpButton = scrollUpButton;
+    }
+
+    public int getScrollHeight() {
+        return scrollHeight;
+    }
+
+    public void setScrollHeight(int scrollHeight) {
+        this.scrollHeight = scrollHeight;
     }
 }
