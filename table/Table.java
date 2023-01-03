@@ -1,8 +1,9 @@
-import org.asynchttpclient.util.Assertions;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,12 +12,14 @@ public class Table
 {
     private WebElement table;
     private WebElement scrollBar;
-    private WebElement scrollButton;
+    private WebElement scrollDownButton;
+    private WebElement scrollUpButton;
 
     private int factHeight = 0;
     private int rowCount = 0;
     private int colCount = 0;
     private int scrollHeight = 0;
+    private Actions actions;
 
     public Table(@NotNull WebElement table)
     {
@@ -25,98 +28,14 @@ public class Table
         colCount = Integer.parseInt(table.getAttribute("aria-colcount"));
     }
 
-    public WebElement[] getFirstRow()
-    {
-        WebElement[] elements = new WebElement[colCount];
-
-        for(int i = 1; i < colCount; i++)
-        {
-            elements[i] = table.findElement(By.xpath("((//tr/th)[" + (i + 1) + "]/div/div)[1]"));
-        }
-
-        return elements;
+    public Actions getActions() {
+        return actions;
     }
 
-    /*
-    public WebElement getRow(int i)
-    {
-        return table.findElement(By.xpath("//tbody//tr[@aria-rowindex='" + i + "']"));
+    public void setActions(Actions actions) {
+        this.actions = actions;
     }
 
-    public int checkTable()
-    {
-        WebElement row = getRow(i);
-        Map<String, String> map = new HashMap<>();
-        map.put(firstRowElements[j].getAttribute("textContent"),
-            row.findElement(By.xpath("(//td)[j + 1]")).getAttribute("textContent"));
-    }
-     */
-
-    public int checkTable()
-    {
-        WebElement[] firstRowElements = getFirstRow();
-        Map<String, String> map = new HashMap<>();
-        for(int i = 1; i <= rowCount; i++)
-        {
-            for(int j = 1; j < colCount; j++)
-            {
-                map.put(firstRowElements[j].getAttribute("textContent"), table.findElement(By.xpath(
-                        "(//tbody//tr[@aria-rowindex='" + i + "']//td)[" + (j + 1)
-                        + "]")).getAttribute("textContent"));
-            }
-
-            map.remove("Country");
-            if(!checkRow(map, i))
-            {
-                return i;
-            }
-            map.clear();
-            scroll(scrollHeight);
-        }
-
-        return 0;
-    }
-
-    public boolean checkRow(Map<String, String> map, int row)
-    {
-        WebElement first;
-        List<WebElement> second;
-        for (String key : map.keySet())
-        {
-            String temp = map.get(key).replace("$", "");
-            if(temp.contains("%"))
-            {
-                temp = "%";
-            }
-            first = table.findElement(By.xpath("//thead//*[text()='" + key + "']/../.."));
-            second = table.findElements(By.xpath("//tr[@aria-rowindex='" + row + "']//*[text()=\"" + temp
-                    + "\"]//ancestor::td"));
-            String o = first.getAttribute("ariaColIndex");
-            String s;
-            for (WebElement element : second)
-            {
-                s = element.getAttribute("ariaColIndex");
-                if (o.equals(s))
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    void scroll(int px)
-    {
-        int i = Integer.parseInt(scrollBar.getAttribute("aria-valuenow"));
-        int scrollPerClick = Integer.parseInt(scrollBar.getAttribute("thumbSize"));
-        int end = factHeight + px;
-        for(; i < end - scrollPerClick; i += scrollPerClick)
-        {
-            scrollButton.click();
-        }
-        factHeight += px;
-    }
-    
     public int getRowCount() {
         return rowCount;
     }
@@ -153,14 +72,24 @@ public class Table
         this.scrollBar = scrollBar;
     }
 
-    public WebElement getScrollButton()
+    public WebElement getScrollDownButton()
     {
-        return scrollButton;
+        return scrollDownButton;
     }
 
-    public void setScrollButton(WebElement scrollButton)
+    public void setScrollDownButton(WebElement scrollDownButton)
     {
-        this.scrollButton = scrollButton;
+        this.scrollDownButton = scrollDownButton;
+    }
+
+    public WebElement getScrollUpButton()
+    {
+        return scrollUpButton;
+    }
+
+    public void setScrollUpButton(WebElement scrollUpButton)
+    {
+        this.scrollUpButton = scrollUpButton;
     }
 
     public int getScrollHeight() {
@@ -169,5 +98,107 @@ public class Table
 
     public void setScrollHeight(int scrollHeight) {
         this.scrollHeight = scrollHeight;
+    }
+
+    void scrollDown(int px)
+    {
+        int i = Integer.parseInt(scrollBar.getAttribute("aria-valuenow"));
+        int scrollPerClick = Integer.parseInt(scrollBar.getAttribute("thumbSize"));
+        int end = factHeight + px;
+        for(; i < end - scrollPerClick; i += scrollPerClick)
+        {
+            scrollDownButton.click();
+        }
+        factHeight += px;
+    }
+
+    void ScrollUp(int px)
+    {
+        int i = Integer.parseInt(scrollBar.getAttribute("aria-valuenow"));
+        int scrollPerClick = Integer.parseInt(scrollBar.getAttribute("thumbSize"));
+        int end = factHeight - px;
+        for(; i > end + scrollPerClick; i -= scrollPerClick)
+        {
+            scrollUpButton.click();
+        }
+        factHeight -= px;
+    }
+
+    public List<WebElement> getTableRows()
+    {
+        List<WebElement> elements = new ArrayList<>();
+
+        for(int i = 1; i <= 40; i++)
+        {
+            elements.add(table.findElement(By.xpath("//tbody//tr[@aria-rowindex='" + i + "']")));
+            scrollDown(scrollHeight);
+        }
+        ScrollUp(factHeight);
+        return elements;
+    }
+
+    public List<String> getColumnValues()
+    {
+        List<String> elements = new ArrayList<>();
+
+        for(int i = 1; i < colCount; i++)
+        {
+            elements.add(table.findElement(By.xpath("((//tr/th)[" + (i + 1) + "]/div/div)[1]")).getText());
+        }
+
+        return elements;
+    }
+
+    public int getColumnIndex(String columnName)
+    {
+        List<String> columnValues = getColumnValues();
+        int index = 2;
+        for(String data : columnValues)
+        {
+            if(data.equals(columnName))
+            {
+                break;
+            }
+            index++;
+        }
+        return index;
+    }
+
+    public void verifyRow(Map<String, String> map)
+    {
+        int index = 0;
+        String key = "";
+        for(String tempKey : map.keySet())
+        {
+            index = getColumnIndex(tempKey);
+            key = tempKey;
+        }
+
+        List<WebElement> tableRows = getTableRows();
+
+        WebElement tempCell;
+        String rowIndex;
+        for(WebElement tempRow : tableRows)
+        {
+            try
+            {
+                //actions.scrollToElement(tempRow).perform();
+                rowIndex = tempRow.getAttribute("ariaRowIndex");
+                tempCell = tempRow.findElement(By.xpath("//tr[@aria-rowindex='"
+                        + rowIndex + "']//*[text()=\""
+                        + map.get(key) + "\"]//ancestor::td"));
+                scrollDown(scrollHeight);
+            }
+            catch (Exception e)
+            {
+                scrollDown(scrollHeight);
+                continue;
+            }
+            int temp = Integer.parseInt(tempCell.getAttribute("ariaColIndex"));
+            if(temp == index)
+            {
+                System.out.println("Cell at row: " + (Integer.parseInt(rowIndex) - 1));
+            }
+        }
     }
 }
