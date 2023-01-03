@@ -54,15 +54,7 @@ public class Table
 
     public List<WebElement> getTableRows()
     {
-        List<WebElement> elements = new ArrayList<>();
-
-        for(int i = 1; i <= 40; i++)
-        {
-            elements.add(table.findElement(By.xpath("//tbody//tr[@aria-rowindex='" + i + "']")));
-            scrollDown(scrollHeight);
-        }
-        ScrollUp(factHeight);
-        return elements;
+        return new ArrayList<>(table.findElements(By.xpath("//tbody//tr[@aria-rowindex]")));
     }
 
     public List<String> getColumnValues()
@@ -110,16 +102,13 @@ public class Table
         {
             try
             {
-                //actions.scrollToElement(tempRow).perform();
                 rowIndex = tempRow.getAttribute("ariaRowIndex");
                 tempCell = tempRow.findElement(By.xpath("//tr[@aria-rowindex='"
                         + rowIndex + "']//*[text()=\""
                         + map.get(key) + "\"]//ancestor::td"));
-                scrollDown(scrollHeight);
             }
             catch (Exception e)
             {
-                scrollDown(scrollHeight);
                 continue;
             }
             int temp = Integer.parseInt(tempCell.getAttribute("ariaColIndex"));
