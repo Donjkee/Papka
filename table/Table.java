@@ -28,7 +28,71 @@ public class Table
         colCount = Integer.parseInt(table.getAttribute("aria-colcount"));
     }
 
-    void scrollDown(int px)
+    public List<WebElement> getTableRows()
+    {
+        return new ArrayList<>(table.findElements(By.xpath("//tbody//tr[@aria-rowindex]")));
+    }
+
+    public List<String> getColumnValues()
+    {
+        List<String> elements = new ArrayList<>();
+        List<WebElement> firstRow = new ArrayList<>(table.findElements(By.xpath("//tr//th")));
+
+        for(WebElement element : firstRow)
+        {
+            elements.add(element.getText());
+        }
+
+        return elements;
+    }
+
+    public int getColumnIndex(String columnName)
+    {
+        List<String> columnValues = getColumnValues();
+        return columnValues.indexOf(columnName);
+    }
+
+    public void verifyRow(Map<String, String> map)
+    {
+        int index = 0;
+        String key = "";
+        for(String tempKey : map.keySet())
+        {
+            index = getColumnIndex(tempKey) + 1;
+            key = tempKey;
+
+            System.out.println("Key: " + key);
+
+            List<WebElement> tableRows = getTableRows();
+
+            WebElement tempCell;
+            String rowIndex;
+            for(WebElement tempRow : tableRows)
+            {
+                try
+                {
+                    //actions.scrollToElement(tempRow).perform();
+                    rowIndex = tempRow.getAttribute("ariaRowIndex");
+                    tempCell = tempRow.findElement(By.xpath("//tr[@aria-rowindex='"
+                            + rowIndex + "']//*[text()=\""
+                            + map.get(key) + "\"]//ancestor::td"));
+                    //scrollDown(scrollHeight);
+                }
+                catch (Exception e)
+                {
+                    //scrollDown(scrollHeight);
+                    continue;
+                }
+                int temp = Integer.parseInt(tempCell.getAttribute("ariaColIndex"));
+                if(temp == index)
+                {
+                    System.out.println("Cell at row: " + (Integer.parseInt(rowIndex) - 1));
+                }
+            }
+        }
+    }
+    
+    public void scrollDown(int px)
     {
         int i = Integer.parseInt(scrollBar.getAttribute("aria-valuenow"));
         int scrollPerClick = Integer.parseInt(scrollBar.getAttribute("thumbSize"));
@@ -40,7 +104,7 @@ public class Table
         factHeight += px;
     }
 
-    void ScrollUp(int px)
+    public void ScrollUp(int px)
     {
         int i = Integer.parseInt(scrollBar.getAttribute("aria-valuenow"));
         int scrollPerClick = Integer.parseInt(scrollBar.getAttribute("thumbSize"));
@@ -50,73 +114,6 @@ public class Table
             scrollUpButton.click();
         }
         factHeight -= px;
-    }
-
-    public List<WebElement> getTableRows()
-    {
-        return new ArrayList<>(table.findElements(By.xpath("//tbody//tr[@aria-rowindex]")));
-    }
-
-    public List<String> getColumnValues()
-    {
-        List<String> elements = new ArrayList<>();
-
-        for(int i = 1; i < colCount; i++)
-        {
-            elements.add(table.findElement(By.xpath("((//tr/th)[" + (i + 1) + "]/div/div)[1]")).getText());
-        }
-
-        return elements;
-    }
-
-    public int getColumnIndex(String columnName)
-    {
-        List<String> columnValues = getColumnValues();
-        int index = 2;
-        for(String data : columnValues)
-        {
-            if(data.equals(columnName))
-            {
-                break;
-            }
-            index++;
-        }
-        return index;
-    }
-
-    public void verifyRow(Map<String, String> map)
-    {
-        int index = 0;
-        String key = "";
-        for(String tempKey : map.keySet())
-        {
-            index = getColumnIndex(tempKey);
-            key = tempKey;
-        }
-
-        List<WebElement> tableRows = getTableRows();
-
-        WebElement tempCell;
-        String rowIndex;
-        for(WebElement tempRow : tableRows)
-        {
-            try
-            {
-                rowIndex = tempRow.getAttribute("ariaRowIndex");
-                tempCell = tempRow.findElement(By.xpath("//tr[@aria-rowindex='"
-                        + rowIndex + "']//*[text()=\""
-                        + map.get(key) + "\"]//ancestor::td"));
-            }
-            catch (Exception e)
-            {
-                continue;
-            }
-            int temp = Integer.parseInt(tempCell.getAttribute("ariaColIndex"));
-            if(temp == index)
-            {
-                System.out.println("Cell at row: " + (Integer.parseInt(rowIndex) - 1));
-            }
-        }
     }
     
     public Actions getActions() {
