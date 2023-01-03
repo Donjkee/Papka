@@ -9,22 +9,11 @@ public class DriverChrome
 {
         private WebDriver driver;
 
-
         public DriverChrome(String url) throws InterruptedException
         {
             driver = new ChromeDriver();
             driver.get(url);
             Thread.sleep(500);
-        }
-
-        public WebDriver getDriver()
-        {
-            return driver;
-        }
-
-        public void setDriver(WebDriver driver)
-        {
-            this.driver = driver;
         }
 
         public void checkTable()
@@ -44,11 +33,23 @@ public class DriverChrome
 
             Map<String, String> map = new HashMap<>();
             map.put("Product Name", "Ultrean 6 Quart Air Fryer");
+            map.put("Date", "27.12.2022");
+
             table.verifyRow(map);
         }
 
         public void quit()
         {
             driver.quit();
+        }
+        
+        public WebDriver getDriver()
+        {
+            return driver;
+        }
+
+        public void setDriver(WebDriver driver)
+        {
+            this.driver = driver;
         }
 }
