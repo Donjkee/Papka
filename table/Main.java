@@ -7,7 +7,7 @@ public class Main
         DriverChrome test = new DriverChrome("https://www.htmlelements.com/demos/table/overview/index.htm");
 
         test.checkTable();
-        Thread.sleep(10000);
+        Thread.sleep(15000);
         test.quit();
     }
 }
