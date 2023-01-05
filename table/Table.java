@@ -56,12 +56,14 @@ public class Table
     {
         int index = 0;
         String key = "";
+        boolean flag = false;
         for(String tempKey : map.keySet())
         {
+            flag = false;
             index = getColumnIndex(tempKey) + 1;
             key = tempKey;
 
-            System.out.println("Key: " + key);
+            System.out.println("Key: " + key + ", Data: " + map.get(key));
 
             List<WebElement> tableRows = getTableRows();
 
@@ -86,8 +88,13 @@ public class Table
                 int temp = Integer.parseInt(tempCell.getAttribute("ariaColIndex"));
                 if(temp == index)
                 {
+                    flag = true;
                     System.out.println("Cell at row: " + (Integer.parseInt(rowIndex) - 1));
                 }
+            }
+            if(!flag)
+            {
+                System.out.println("No such elements!");
             }
         }
     }
